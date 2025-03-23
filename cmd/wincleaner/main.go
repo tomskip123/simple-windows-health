@@ -22,11 +22,13 @@ func main() {
 	recycle := flag.Bool("recycle", false, "Empty Recycle Bin")
 	diskOptimization := flag.Bool("optimize", false, "Run Disk Optimization (defrag for HDDs, TRIM for SSDs)")
 	checkDisk := flag.Bool("chkdsk", false, "Run Check Disk utility")
+	diskDriveStatus := flag.Bool("diskstatus", false, "Check disk drive model and status using WMIC")
 	flushDNS := flag.Bool("flushdns", false, "Flush DNS resolver cache")
 	memoryDiag := flag.Bool("memcheck", false, "Run Windows Memory Diagnostic tool")
 	prefetch := flag.Bool("prefetch", false, "Clean Windows prefetch directory")
 	powerCfg := flag.Bool("power", false, "Optimize power configuration settings")
 	resetNet := flag.Bool("resetnet", false, "Reset Windows network configuration")
+	startupItems := flag.Bool("startup", false, "Optimize startup items")
 	all := flag.Bool("all", false, "Run all cleaning operations")
 	status := flag.Bool("status", false, "Display system status information")
 	versionFlag := flag.Bool("version", false, "Display version information")
@@ -62,8 +64,8 @@ func main() {
 
 	// Check if at least one flag is provided
 	if !*diskCleanup && !*tempFiles && !*eventLogs && !*sfc && !*dism && !*recycle &&
-		!*diskOptimization && !*checkDisk && !*flushDNS && !*memoryDiag && !*prefetch &&
-		!*powerCfg && !*resetNet && !*all && !*status {
+		!*diskOptimization && !*checkDisk && !*diskDriveStatus && !*flushDNS && !*memoryDiag && !*prefetch &&
+		!*powerCfg && !*resetNet && !*startupItems && !*all && !*status {
 		// If no flags, default to interactive mode
 		cleaner.RunInteractiveMode()
 		return
@@ -119,6 +121,10 @@ func main() {
 		runOperation("Check Disk", cleaner.RunCheckDisk)
 	}
 
+	if *all || *diskDriveStatus {
+		runOperation("Check Disk Drive Status", cleaner.CheckDiskDriveStatus)
+	}
+
 	if *all || *flushDNS {
 		runOperation("Flush DNS Cache", cleaner.FlushDNSCache)
 	}
@@ -139,9 +145,13 @@ func main() {
 		runOperation("Reset Network Configuration", cleaner.ResetNetworkConfig)
 	}
 
+	if *all || *startupItems {
+		runOperation("Optimize Startup Items", cleaner.OptimizeStartup)
+	}
+
 	if *all || *diskCleanup || *tempFiles || *eventLogs || *sfc || *dism || *recycle ||
-		*diskOptimization || *checkDisk || *flushDNS || *memoryDiag || *prefetch ||
-		*powerCfg || *resetNet {
+		*diskOptimization || *checkDisk || *diskDriveStatus || *flushDNS || *memoryDiag ||
+		*prefetch || *powerCfg || *resetNet || *startupItems {
 		fmt.Println("Cleaning operations completed.")
 	}
 }

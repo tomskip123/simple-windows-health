@@ -1,9 +1,11 @@
 package cleaner
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 // RunDiskCleanup executes the Windows built-in Disk Cleanup utility (cleanmgr.exe)
@@ -23,6 +25,8 @@ func RunDiskCleanup() error {
 
 // CleanTempFiles removes files from Windows temporary directories
 func CleanTempFiles() error {
+	var errors []string
+
 	// Get the Windows temp directory
 	tempDir := os.Getenv("TEMP")
 	if tempDir == "" {
@@ -30,16 +34,32 @@ func CleanTempFiles() error {
 		tempDir = filepath.Join(os.Getenv("SYSTEMDRIVE"), "Windows", "Temp")
 	}
 
-	// Also clean user temp directory
+	// User temp directory
 	userTempDir := filepath.Join(os.Getenv("USERPROFILE"), "AppData", "Local", "Temp")
+	
+	// Additional temporary folders
+	winTempDir := filepath.Join(os.Getenv("SYSTEMDRIVE"), "Windows", "Temp")
+	prefetchDir := filepath.Join(os.Getenv("SYSTEMDRIVE"), "Windows", "Prefetch")
+	
+	// Windows Update cleanup folder
+	softwareDistDir := filepath.Join(os.Getenv("SYSTEMDRIVE"), "Windows", "SoftwareDistribution", "Download")
 
-	// Clean the system temp directory
-	if err := cleanDirectory(tempDir); err != nil {
-		return err
+	// Clean each directory
+	dirs := []string{tempDir, userTempDir, winTempDir, prefetchDir, softwareDistDir}
+	
+	for _, dir := range dirs {
+		err := cleanDirectory(dir)
+		if err != nil {
+			errors = append(errors, fmt.Sprintf("Error cleaning %s: %v", dir, err))
+		}
 	}
 
-	// Clean the user temp directory
-	return cleanDirectory(userTempDir)
+	// If we have errors, combine them
+	if len(errors) > 0 {
+		return fmt.Errorf("errors while cleaning temporary files: %s", strings.Join(errors, "; "))
+	}
+
+	return nil
 }
 
 // cleanDirectory removes files from the specified directory
@@ -47,24 +67,48 @@ func CleanTempFiles() error {
 func cleanDirectory(dir string) error {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		return err
+		return fmt.Errorf("could not read directory %s: %w", dir, err)
 	}
+
+	var failedCount int
+	var totalCount int
+	var permissionDenied int
 
 	for _, entry := range entries {
 		path := filepath.Join(dir, entry.Name())
 
-		// Skip removal if it's a directory
+		// Get file info
 		info, err := entry.Info()
 		if err != nil {
-			// Just log and continue if we can't get file info
+			// Just continue if we can't get file info
 			continue
 		}
 
-		// Remove files only, not directories
-		if !info.IsDir() {
+		if info.IsDir() {
+			// Recursively clean subdirectories
+			cleanDirectory(path)
+		} else {
+			totalCount++
 			// Attempt to remove the file, ignore errors for files in use
-			os.Remove(path)
+			err := os.Remove(path)
+			if err != nil {
+				if os.IsPermission(err) {
+					permissionDenied++
+				} else {
+					failedCount++
+				}
+			}
 		}
+	}
+
+	// Only print summary information instead of individual files
+	if failedCount > 0 {
+		fmt.Printf("%d/%d files in %s could not be removed (in use by other processes)\n", 
+			failedCount, totalCount, dir)
+	}
+	if permissionDenied > 0 {
+		fmt.Printf("%d/%d files in %s could not be removed due to permission denied\n", 
+			permissionDenied, totalCount, dir)
 	}
 
 	return nil

@@ -113,6 +113,11 @@ func getMenuOptions() []MenuOption {
 			},
 		},
 		{
+			Name:        "Disk Drive Status",
+			Description: "Check disk drive health using WMIC",
+			Action:      CheckDiskDriveStatus,
+		},
+		{
 			Name:        "Disk Cleanup",
 			Description: "Run Windows Disk Cleanup utility",
 			Action:      RunDiskCleanup,
@@ -168,44 +173,96 @@ func getMenuOptions() []MenuOption {
 			Action:      CleanPrefetch,
 		},
 		{
-			Name:        "Reset Network",
+			Name:        "Reset Network Configuration",
 			Description: "Reset Windows network configuration",
 			Action:      ResetNetworkConfig,
 		},
 		{
-			Name:        "Run All Cleaning Operations",
-			Description: "Execute all cleaning operations sequentially",
+			Name:        "Optimize Startup Items",
+			Description: "Analyze and manage startup programs with performance impact assessment",
+			Action:      OptimizeStartup,
+		},
+		{
+			Name:        "Run All Maintenance Tasks",
+			Description: "Execute all cleaning and optimization operations",
 			Action: func() error {
-				fmt.Println("Running all cleaning operations...")
-
-				operations := []struct {
+				fmt.Println("Running all maintenance tasks...")
+				
+				tasks := []struct {
 					name   string
 					action func() error
 				}{
 					{"Disk Cleanup", RunDiskCleanup},
-					{"Temporary Files Cleaning", CleanTempFiles},
-					{"Event Logs Clearing", ClearEventLogs},
-					{"System File Checker", RunSystemFileChecker},
-					{"DISM Windows Image Repair", RunDISM},
+					{"Clean Temporary Files", CleanTempFiles},
+					{"Clear Event Logs", ClearEventLogs},
 					{"Empty Recycle Bin", EmptyRecycleBin},
-					{"Disk Optimization", RunDiskOptimization},
-					{"Check Disk", RunCheckDisk},
 					{"Flush DNS Cache", FlushDNSCache},
 					{"Clean Prefetch Cache", CleanPrefetch},
+					{"Optimize Power Configuration", OptimizePowerConfig},
+					{"Disk Drive Status", CheckDiskDriveStatus},
 				}
-
-				for _, op := range operations {
-					fmt.Printf("\nRunning %s...\n", op.name)
-					err := op.action()
-					if err != nil {
-						fmt.Printf("Error running %s: %v\n", op.name, err)
-					} else {
-						fmt.Printf("%s completed successfully.\n", op.name)
+				
+				// Only add network reset if we have admin privileges
+				if IsAdmin() {
+					tasks = append(tasks, struct {
+						name   string
+						action func() error
+					}{"Reset Network Configuration", ResetNetworkConfig})
+					
+					// Add other admin-only tasks
+					adminTasks := []struct {
+						name   string
+						action func() error
+					}{
+						{"System File Checker", RunSystemFileChecker},
+						{"DISM Windows Image Repair", RunDISM},
+						{"Disk Optimization", RunDiskOptimization},
+						{"Check Disk", RunCheckDisk},
+						{"Windows Memory Diagnostic", RunMemoryDiagnostic},
 					}
-					// Small pause between operations
-					time.Sleep(1 * time.Second)
+					
+					tasks = append(tasks, adminTasks...)
+				} else {
+					fmt.Println("\nNote: Some tasks require administrator privileges and will be skipped.")
+					fmt.Println("Restart the application with admin rights to run all tasks.")
 				}
-
+				
+				// Run all tasks and keep track of results
+				successCount := 0
+				failedCount := 0
+				var failedTasks []string
+				
+				for _, task := range tasks {
+					fmt.Printf("\nRunning %s...\n", task.name)
+					err := task.action()
+					if err != nil {
+						fmt.Printf("Error: %v\n", err)
+						failedCount++
+						failedTasks = append(failedTasks, task.name)
+					} else {
+						fmt.Printf("%s completed successfully.\n", task.name)
+						successCount++
+					}
+					time.Sleep(500 * time.Millisecond) // Small delay between tasks
+				}
+				
+				// Print summary
+				fmt.Println("\n========== Maintenance Summary ==========")
+				fmt.Printf("Total tasks attempted: %d\n", successCount+failedCount)
+				fmt.Printf("Successfully completed: %d\n", successCount)
+				
+				if failedCount > 0 {
+					fmt.Printf("Failed tasks: %d\n", failedCount)
+					for i, task := range failedTasks {
+						fmt.Printf("  %d. %s\n", i+1, task)
+					}
+					fmt.Println("\nSome tasks failed. You might need to run them individually or with admin privileges.")
+				} else {
+					fmt.Println("All maintenance tasks completed successfully!")
+				}
+				
+				fmt.Println("\nPress Enter to continue...")
+				bufio.NewReader(os.Stdin).ReadString('\n')
 				return nil
 			},
 		},
