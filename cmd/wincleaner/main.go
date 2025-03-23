@@ -20,9 +20,18 @@ func main() {
 	sfc := flag.Bool("sfc", false, "Run System File Checker")
 	dism := flag.Bool("dism", false, "Run DISM to repair Windows image")
 	recycle := flag.Bool("recycle", false, "Empty Recycle Bin")
+	diskOptimization := flag.Bool("optimize", false, "Run Disk Optimization (defrag for HDDs, TRIM for SSDs)")
+	checkDisk := flag.Bool("chkdsk", false, "Run Check Disk utility")
+	flushDNS := flag.Bool("flushdns", false, "Flush DNS resolver cache")
+	memoryDiag := flag.Bool("memcheck", false, "Run Windows Memory Diagnostic tool")
+	prefetch := flag.Bool("prefetch", false, "Clean Windows prefetch directory")
+	powerCfg := flag.Bool("power", false, "Optimize power configuration settings")
+	resetNet := flag.Bool("resetnet", false, "Reset Windows network configuration")
 	all := flag.Bool("all", false, "Run all cleaning operations")
 	status := flag.Bool("status", false, "Display system status information")
 	versionFlag := flag.Bool("version", false, "Display version information")
+	interactive := flag.Bool("interactive", false, "Launch interactive console mode")
+	requireAdmin := flag.Bool("admin", false, "Request administrator privileges")
 
 	// Override default usage
 	flag.Usage = usage
@@ -34,15 +43,35 @@ func main() {
 		return
 	}
 
+	// Check if admin privileges are explicitly requested
+	if *requireAdmin && !cleaner.IsAdmin() {
+		fmt.Println("Requesting administrator privileges...")
+		err := cleaner.RunAsAdmin()
+		if err != nil {
+			fmt.Printf("Error requesting admin privileges: %v\n", err)
+			os.Exit(1)
+		}
+		// The program will exit in RunAsAdmin if successful
+	}
+
+	// Launch interactive mode if requested
+	if *interactive {
+		cleaner.RunInteractiveMode()
+		return
+	}
+
 	// Check if at least one flag is provided
-	if !*diskCleanup && !*tempFiles && !*eventLogs && !*sfc && !*dism && !*recycle && !*all && !*status {
-		usage()
-		os.Exit(1)
+	if !*diskCleanup && !*tempFiles && !*eventLogs && !*sfc && !*dism && !*recycle &&
+		!*diskOptimization && !*checkDisk && !*flushDNS && !*memoryDiag && !*prefetch &&
+		!*powerCfg && !*resetNet && !*all && !*status {
+		// If no flags, default to interactive mode
+		cleaner.RunInteractiveMode()
+		return
 	}
 
 	// Check for administrator privileges for certain operations
-	if (*all || *sfc || *dism) && !isAdmin() {
-		fmt.Println("Warning: Some operations (SFC, DISM) require administrator privileges.")
+	if (*all || *sfc || *dism || *diskOptimization || *checkDisk || *memoryDiag) && !cleaner.IsAdmin() {
+		fmt.Println("Warning: Some operations (SFC, DISM, Disk Optimization, Check Disk, Memory Diagnostic) require administrator privileges.")
 		fmt.Println("Please run this program as administrator for full functionality.")
 	}
 
@@ -82,7 +111,37 @@ func main() {
 		runOperation("Empty Recycle Bin", cleaner.EmptyRecycleBin)
 	}
 
-	if *all || *diskCleanup || *tempFiles || *eventLogs || *sfc || *dism || *recycle {
+	if *all || *diskOptimization {
+		runOperation("Disk Optimization", cleaner.RunDiskOptimization)
+	}
+
+	if *all || *checkDisk {
+		runOperation("Check Disk", cleaner.RunCheckDisk)
+	}
+
+	if *all || *flushDNS {
+		runOperation("Flush DNS Cache", cleaner.FlushDNSCache)
+	}
+
+	if *all || *memoryDiag {
+		runOperation("Windows Memory Diagnostic", cleaner.RunMemoryDiagnostic)
+	}
+
+	if *all || *prefetch {
+		runOperation("Clean Prefetch Cache", cleaner.CleanPrefetch)
+	}
+
+	if *all || *powerCfg {
+		runOperation("Optimize Power Configuration", cleaner.OptimizePowerConfig)
+	}
+
+	if *all || *resetNet {
+		runOperation("Reset Network Configuration", cleaner.ResetNetworkConfig)
+	}
+
+	if *all || *diskCleanup || *tempFiles || *eventLogs || *sfc || *dism || *recycle ||
+		*diskOptimization || *checkDisk || *flushDNS || *memoryDiag || *prefetch ||
+		*powerCfg || *resetNet {
 		fmt.Println("Cleaning operations completed.")
 	}
 }
@@ -95,7 +154,14 @@ func usage() {
 	fmt.Println("\nOptions:")
 	flag.PrintDefaults()
 	fmt.Println("\nExamples:")
+	fmt.Println("  wincleaner -interactive      # Launch interactive console mode")
+	fmt.Println("  wincleaner -admin            # Request administrator privileges")
 	fmt.Println("  wincleaner -disk -temp       # Run Disk Cleanup and clean temporary files")
+	fmt.Println("  wincleaner -optimize         # Run Disk Optimization (defrag for HDDs, TRIM for SSDs)")
+	fmt.Println("  wincleaner -chkdsk           # Run Check Disk utility")
+	fmt.Println("  wincleaner -prefetch         # Clean Windows prefetch directory")
+	fmt.Println("  wincleaner -power            # Optimize power configuration settings")
+	fmt.Println("  wincleaner -resetnet         # Reset Windows network configuration")
 	fmt.Println("  wincleaner -status           # Display system status information")
 	fmt.Println("  wincleaner -all              # Run all cleaning operations")
 }
@@ -127,10 +193,4 @@ func runOperation(name string, operation func() error) {
 	} else {
 		fmt.Printf("%s completed successfully.\n", name)
 	}
-}
-
-// isAdmin checks if the program is running with administrator privileges
-func isAdmin() bool {
-	_, err := os.Open("\\\\.\\PHYSICALDRIVE0")
-	return err == nil
 }
