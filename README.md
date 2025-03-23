@@ -86,6 +86,21 @@ build_release.bat # Release build with optimizations
 - Windows 10 or later
 - Administrator privileges for some operations
 
+## Troubleshooting
+
+### Windows Security Alerts
+
+Windows Security may detect this utility as potentially unwanted software since it performs system maintenance operations that modify protected areas of Windows. This is a false positive. You can:
+
+1. **Add an exclusion** in Windows Security settings:
+   - Go to Windows Security > Virus & threat protection > Manage settings
+   - Scroll to Exclusions and click "Add or remove exclusions"
+   - Add the location where you extracted the tool
+
+2. **Run from a trusted source** - Download only from the official GitHub releases page
+
+3. **Use the self-signed release** - Download the signed version from releases if available
+
 ## License
 
 MIT License 
