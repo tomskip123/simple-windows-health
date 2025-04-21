@@ -20,41 +20,69 @@ A comprehensive Windows system maintenance utility that helps keep your Windows 
 
 ## Usage
 
-```
-wincleaner [options]
+```bash
+wincleaner [flags] <command> [arguments]
 ```
 
-### Options
+### Flags
 
-- `-disk`: Run Disk Cleanup utility
-- `-temp`: Clean temporary files
-- `-events`: Clear Windows event logs
-- `-sfc`: Run System File Checker
-- `-dism`: Run DISM to repair Windows image
-- `-recycle`: Empty Recycle Bin
-- `-optimize`: Run Disk Optimization (defrag for HDDs, TRIM for SSDs)
-- `-chkdsk`: Run Check Disk utility
-- `-flushdns`: Flush DNS resolver cache
-- `-memcheck`: Run Windows Memory Diagnostic tool
-- `-prefetch`: Clean Windows prefetch directory
-- `-power`: Optimize power configuration settings
-- `-resetnet`: Reset Windows network configuration
-- `-all`: Run all cleaning operations
-- `-status`: Display system status information
-- `-version`: Display version information
-- `-interactive`: Launch interactive console mode
-- `-admin`: Request administrator privileges
+- `-h, --help`: Show help information
+- `--config`: Path to YAML config file; supports advanced settings (default_ops, log_file, timeout, timeouts, json_output)
+- `--version`: Display version information
+
+### Configuration File
+
+You can provide a `wincleaner.yaml` configuration file to customize behavior. It supports the following fields:
+
+```yaml
+default_ops:
+  - disk
+  - temp
+log_file: wincleaner.log
+timeout: 120s
+timeouts:
+  "Disk Cleanup": 30s
+  "Check Disk": 60s
+json_output: true
+```
+
+Field descriptions:
+- `default_ops`: List of operation names to run by default when no subcommand is provided.
+- `log_file`: Path to write structured logs.
+- `timeout`: Global timeout (Go duration) applied to all operations if no per-operation override is set.
+- `timeouts`: Map of individual operation names to Go duration strings to override the global timeout.
+- `json_output`: Enable JSON output mode for commands that support it.
+
+### Commands
+
+- `disk`: Run Disk Cleanup utility
+- `temp`: Clean temporary files
+- `events`: Clear Windows event logs
+- `sfc`: Run System File Checker
+- `dism`: Run DISM to repair Windows image
+- `recycle`: Empty Recycle Bin
+- `optimize`: Run Disk Optimization (defrag for HDDs, TRIM for SSDs)
+- `chkdsk`: Run Check Disk utility
+- `flushdns`: Flush DNS resolver cache
+- `memcheck`: Run Windows Memory Diagnostic tool
+- `prefetch`: Clean Windows prefetch directory
+- `power`: Optimize power configuration settings
+- `resetnet`: Reset Windows network configuration
+- `all`: Run all cleaning operations
+- `status`: Display system status information
+- `interactive`: Launch interactive console mode
+- `admin`: Request administrator privileges
 
 ### Examples
 
-```
-wincleaner -interactive      # Launch interactive console mode
-wincleaner -admin            # Request administrator privileges
-wincleaner -disk -temp       # Run Disk Cleanup and clean temporary files
-wincleaner -optimize         # Run Disk Optimization
-wincleaner -chkdsk           # Run Check Disk utility
-wincleaner -status           # Display system status information
-wincleaner -all              # Run all cleaning operations
+```bash
+wincleaner interactive      # Launch interactive console mode
+wincleaner admin            # Request administrator privileges
+wincleaner disk temp        # Run Disk Cleanup and clean temporary files
+wincleaner optimize         # Run Disk Optimization
+wincleaner chkdsk           # Run Check Disk utility
+wincleaner status           # Display system status information
+wincleaner all              # Run all cleaning operations
 ```
 
 ## Installation
@@ -65,8 +93,16 @@ wincleaner -all              # Run all cleaning operations
 
 ## Building from Source
 
+```bash
+go mod download
+go build -o bin/wincleaner.exe ./cmd/wincleaner
 ```
-go build -o bin/wincleaner.exe cmd/wincleaner/main.go
+
+You can also build using the provided scripts:
+
+```bash
+build.bat
+build_release.bat
 ```
 
 ## Requirements
