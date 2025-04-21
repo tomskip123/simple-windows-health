@@ -55,8 +55,6 @@ func main() {
 		commands.NewResetNetCommand(),
 		commands.NewAllCommand(),
 		commands.NewStatusCommand(),
-		commands.NewInteractiveCommand(),
-		commands.NewAdminCommand(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {

@@ -2,30 +2,28 @@ package core
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"github.com/user/windows_health/pkg/cleaner"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"gopkg.in/yaml.v3"
 )
 
-// Config holds settings from the YAML config file
+// ConfigData holds settings from the YAML config file
 // default_ops: list of command names to run by default
 // log_file: path to the log file
 // timeout: global timeout for operations
 // timeouts: per-operation timeout overrides
 // json_output: toggle JSON output mode for supported commands
-type Config struct {
-	DefaultOps   []string            `yaml:"default_ops"`
-	LogFile      string              `yaml:"log_file"`
-	Timeout      time.Duration         `yaml:"timeout"`
-	Timeouts     map[string]time.Duration `yaml:"timeouts"`
-	JSONOutput   bool                  `yaml:"json_output"`
+type ConfigData struct {
+	DefaultOps []string                 `yaml:"default_ops"`
+	LogFile    string                   `yaml:"log_file"`
+	Timeout    time.Duration            `yaml:"timeout"`
+	Timeouts   map[string]time.Duration `yaml:"timeouts"`
+	JSONOutput bool                     `yaml:"json_output"`
 }
 
 var (
@@ -33,10 +31,10 @@ var (
 	ConfigFile string
 
 	// Config is populated by LoadConfig
-	Config     Config
+	Config ConfigData
 
 	// Logger is the global log target; set by SetupLogger
-	Logger     *logrus.Logger
+	Logger *logrus.Logger
 )
 
 // LoadConfig reads the YAML config (if present) into Config
@@ -44,7 +42,7 @@ func LoadConfig() {
 	if ConfigFile == "" {
 		ConfigFile = "wincleaner.yaml"
 	}
-	data, err := ioutil.ReadFile(ConfigFile)
+	data, err := os.ReadFile(ConfigFile)
 	if err != nil {
 		// No config file; silent fallback to defaults
 		return
@@ -165,16 +163,17 @@ func RunAllOperations(ctx context.Context) {
 func DisplaySystemStatus(status *cleaner.SystemStatus) {
 	// JSON output mode
 	if Config.JSONOutput {
-	fmt.Println("\n=== System Status Information ===")
-	fmt.Printf("Windows Version: %s\n", status.WindowsVersion)
-	fmt.Printf("Last Boot Time: %s\n", status.LastBootTime)
-	fmt.Println("\nDisk Space Information:")
-	fmt.Println("------------------------")
-	for drive, info := range status.DiskSpace {
-		fmt.Printf("Drive %s:\n", drive)
-		fmt.Printf("  Total Size: %s\n", info.TotalSize)
-		fmt.Printf("  Free Space: %s\n", info.FreeSpace)
-		fmt.Printf("  Used Space: %s (%s)\n", info.UsedSpace, info.UsedPercent)
-		fmt.Println()
+		fmt.Println("\n=== System Status Information ===")
+		fmt.Printf("Windows Version: %s\n", status.WindowsVersion)
+		fmt.Printf("Last Boot Time: %s\n", status.LastBootTime)
+		fmt.Println("\nDisk Space Information:")
+		fmt.Println("------------------------")
+		for drive, info := range status.DiskSpace {
+			fmt.Printf("Drive %s:\n", drive)
+			fmt.Printf("  Total Size: %s\n", info.TotalSize)
+			fmt.Printf("  Free Space: %s\n", info.FreeSpace)
+			fmt.Printf("  Used Space: %s (%s)\n", info.UsedSpace, info.UsedPercent)
+			fmt.Println()
+		}
 	}
-} 
+}

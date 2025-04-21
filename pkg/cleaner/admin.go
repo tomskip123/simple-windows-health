@@ -24,10 +24,8 @@ func RunAsAdmin() error {
 	// Prepare the runas command to request elevation
 	cmd := exec.Command("powershell.exe", "-Command", "Start-Process", "-FilePath", exe, "-ArgumentList", strings.Join(os.Args[1:], " "), "-Verb", "RunAs")
 
-	// Set up the command to create no window
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		HideWindow: true,
-	}
+	// Set up the command to create no window (HideWindow not available on this platform)
+	cmd.SysProcAttr = &syscall.SysProcAttr{}
 
 	// Run the elevation command
 	err = cmd.Start()
