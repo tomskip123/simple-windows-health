@@ -12,7 +12,7 @@ func NewEventsCommand() *cobra.Command {
 		Use:   "events",
 		Short: "Clear Windows event logs",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Event Logs Clearing", cleaner.ClearEventLogs, 0)
+			core.RunOperation(cmd.Context(), "Event Logs Clearing", func() error { return cleaner.ClearEventLogs(core.Verbose) }, 0)
 		},
 	}
 } 

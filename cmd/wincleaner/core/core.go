@@ -153,19 +153,19 @@ func RunAllOperations(ctx context.Context) {
 		op      func() error
 		timeout time.Duration
 	}{
-		{"Disk Cleanup", cleaner.RunDiskCleanup, 0},
-		{"Temporary Files Cleaning", cleaner.CleanTempFiles, 0},
-		{"Event Logs Clearing", cleaner.ClearEventLogs, 0},
-		{"System File Checker", cleaner.RunSystemFileChecker, 120 * time.Second},
-		{"DISM Windows Image Repair", cleaner.RunDISM, 180 * time.Second},
-		{"Empty Recycle Bin", cleaner.EmptyRecycleBin, 0},
-		{"Disk Optimization", cleaner.RunDiskOptimization, 0},
-		{"Check Disk", cleaner.RunCheckDisk, 90 * time.Second},
-		{"Flush DNS Cache", cleaner.FlushDNSCache, 0},
-		{"Windows Memory Diagnostic", cleaner.RunMemoryDiagnostic, 0},
-		{"Clean Prefetch Cache", cleaner.CleanPrefetch, 0},
-		{"Optimize Power Configuration", cleaner.OptimizePowerConfig, 0},
-		{"Reset Network Configuration", cleaner.ResetNetworkConfig, 0},
+		{"Disk Cleanup", func() error { return cleaner.RunDiskCleanup(Verbose) }, 0},
+		{"Temporary Files Cleaning", func() error { return cleaner.CleanTempFiles(Verbose) }, 0},
+		{"Event Logs Clearing", func() error { return cleaner.ClearEventLogs(Verbose) }, 0},
+		{"System File Checker", func() error { return cleaner.RunSystemFileChecker(Verbose) }, 120 * time.Second},
+		{"DISM Windows Image Repair", func() error { return cleaner.RunDISM(Verbose) }, 180 * time.Second},
+		{"Empty Recycle Bin", func() error { return cleaner.EmptyRecycleBin(Verbose) }, 0},
+		{"Disk Optimization", func() error { return cleaner.RunDiskOptimization(Verbose) }, 0},
+		{"Check Disk", func() error { return cleaner.RunCheckDisk(Verbose) }, 90 * time.Second},
+		{"Flush DNS Cache", func() error { return cleaner.FlushDNSCache(Verbose) }, 0},
+		{"Windows Memory Diagnostic", func() error { return cleaner.RunMemoryDiagnostic(Verbose) }, 0},
+		{"Clean Prefetch Cache", func() error { return cleaner.CleanPrefetch(Verbose) }, 0},
+		{"Optimize Power Configuration", func() error { return cleaner.OptimizePowerConfig(Verbose) }, 0},
+		{"Reset Network Configuration", func() error { return cleaner.ResetNetworkConfig(Verbose) }, 0},
 	}
 	for _, op := range ops {
 		RunOperation(ctx, op.name, op.op, op.timeout)

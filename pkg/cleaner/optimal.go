@@ -7,7 +7,7 @@ import (
 
 // SetOptimalWindowsSettings applies recommended Windows settings for best stability and compatibility.
 // Currently, it disables Fast Boot. Extend this function to add more tweaks as needed.
-func SetOptimalWindowsSettings() error {
+func SetOptimalWindowsSettings(verbose bool) error {
 	var input string
 
 	// Wizard: Ask user for power plan preference
@@ -26,9 +26,15 @@ func SetOptimalWindowsSettings() error {
 	switch choice {
 	case 1:
 		// Set to High Performance
+		if verbose {
+			fmt.Println("[VERBOSE] Running command: powershell -Command powercfg /setactive SCHEME_MIN")
+		}
 		powerPlanCmd = exec.Command("powershell", "-Command", "powercfg /setactive SCHEME_MIN")
 	case 2:
 		// Set to Balanced
+		if verbose {
+			fmt.Println("[VERBOSE] Running command: powershell -Command powercfg /setactive SCHEME_BALANCED")
+		}
 		powerPlanCmd = exec.Command("powershell", "-Command", "powercfg /setactive SCHEME_BALANCED")
 	default:
 		fmt.Println("Invalid choice. Skipping power plan change.")
@@ -42,7 +48,9 @@ func SetOptimalWindowsSettings() error {
 		fmt.Println("Power plan applied successfully.")
 	}
 
-	// Disable Fast Boot (sets HiberbootEnabled to 0)
+	if verbose {
+		fmt.Println("[VERBOSE] Running command: powershell -Command Set-ItemProperty -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power' -Name 'HiberbootEnabled' -Value 0")
+	}
 	cmd := exec.Command("powershell", "-Command", "Set-ItemProperty -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power' -Name 'HiberbootEnabled' -Value 0")
 	output, err := cmd.CombinedOutput()
 	if err != nil {

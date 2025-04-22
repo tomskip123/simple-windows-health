@@ -12,7 +12,7 @@ func NewTempCommand() *cobra.Command {
 		Use:   "temp",
 		Short: "Clean temporary files",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Temporary Files Cleaning", cleaner.CleanTempFiles, 0)
+			core.RunOperation(cmd.Context(), "Temporary Files Cleaning", func() error { return cleaner.CleanTempFiles(core.Verbose) }, 0)
 		},
 	}
 } 

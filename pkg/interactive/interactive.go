@@ -1,4 +1,4 @@
-package cleaner
+package interactive
 
 import (
 	"bufio"
@@ -6,6 +6,9 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/user/windows_health/cmd/wincleaner/core"
+	"github.com/user/windows_health/pkg/cleaner"
 )
 
 // MenuOption represents a menu option in the interactive interface
@@ -27,7 +30,7 @@ func RunInteractiveMode() {
 		fmt.Println("   Windows Health Cleaner Utility    ")
 		fmt.Println("======================================")
 
-		if !IsAdmin() {
+		if !cleaner.IsAdmin() {
 			fmt.Println("\n⚠️  WARNING: Not running with administrator privileges.")
 			fmt.Println("    Some operations may not work correctly.")
 			fmt.Println("    Choose option 0 to restart with admin rights.")
@@ -84,13 +87,13 @@ func getMenuOptions() []MenuOption {
 		{
 			Name:        "Restart with Admin Rights",
 			Description: "Restart the application with administrator privileges",
-			Action:      RunAsAdmin,
+			Action:      cleaner.RunAsAdmin,
 		},
 		{
 			Name:        "System Status",
 			Description: "Display detailed system status information",
 			Action: func() error {
-				status, err := GetSystemStatus()
+				status, err := cleaner.GetSystemStatus()
 				if err != nil {
 					return err
 				}
@@ -123,22 +126,22 @@ func getMenuOptions() []MenuOption {
 	options = append(options, MenuOption{
 		Name:        "Apply Optimal Windows Settings",
 		Description: "Apply recommended settings (e.g., disables Fast Boot)",
-		Action:      SetOptimalWindowsSettings,
+		Action:      func() error { return cleaner.SetOptimalWindowsSettings(core.Verbose) },
 	})
 
 	options = append(options,
-		MenuOption{Name: "Disk Cleanup", Description: "Run Windows Disk Cleanup utility", Action: RunDiskCleanup},
-		MenuOption{Name: "Clean Temporary Files", Description: "Remove temporary files from Windows directories", Action: CleanTempFiles},
-		MenuOption{Name: "Clear Event Logs", Description: "Clear Windows event logs", Action: ClearEventLogs},
-		MenuOption{Name: "System File Checker", Description: "Run SFC to scan and repair Windows system files", Action: RunSystemFileChecker},
-		MenuOption{Name: "DISM Repair", Description: "Run DISM to repair the Windows image", Action: RunDISM},
-		MenuOption{Name: "Empty Recycle Bin", Description: "Empty the Windows Recycle Bin", Action: EmptyRecycleBin},
-		MenuOption{Name: "Disk Optimization", Description: "Run disk optimization (defrag for HDDs, TRIM for SSDs)", Action: RunDiskOptimization},
-		MenuOption{Name: "Check Disk", Description: "Run CHKDSK to scan and repair disk errors", Action: RunCheckDisk},
-		MenuOption{Name: "Flush DNS Cache", Description: "Clear Windows DNS resolver cache", Action: FlushDNSCache},
-		MenuOption{Name: "Memory Diagnostic", Description: "Run Windows Memory Diagnostic tool", Action: RunMemoryDiagnostic},
-		MenuOption{Name: "Clean Prefetch Cache", Description: "Clean Windows prefetch directory", Action: CleanPrefetch},
-		MenuOption{Name: "Reset Network", Description: "Reset Windows network configuration", Action: ResetNetworkConfig},
+		MenuOption{Name: "Disk Cleanup", Description: "Run Windows Disk Cleanup utility", Action: func() error { return cleaner.RunDiskCleanup(core.Verbose) }},
+		MenuOption{Name: "Clean Temporary Files", Description: "Remove temporary files from Windows directories", Action: func() error { return cleaner.CleanTempFiles(core.Verbose) }},
+		MenuOption{Name: "Clear Event Logs", Description: "Clear Windows event logs", Action: func() error { return cleaner.ClearEventLogs(core.Verbose) }},
+		MenuOption{Name: "System File Checker", Description: "Run SFC to scan and repair Windows system files", Action: func() error { return cleaner.RunSystemFileChecker(core.Verbose) }},
+		MenuOption{Name: "DISM Repair", Description: "Run DISM to repair the Windows image", Action: func() error { return cleaner.RunDISM(core.Verbose) }},
+		MenuOption{Name: "Empty Recycle Bin", Description: "Empty the Windows Recycle Bin", Action: func() error { return cleaner.EmptyRecycleBin(core.Verbose) }},
+		MenuOption{Name: "Disk Optimization", Description: "Run disk optimization (defrag for HDDs, TRIM for SSDs)", Action: func() error { return cleaner.RunDiskOptimization(core.Verbose) }},
+		MenuOption{Name: "Check Disk", Description: "Run CHKDSK to scan and repair disk errors", Action: func() error { return cleaner.RunCheckDisk(core.Verbose) }},
+		MenuOption{Name: "Flush DNS Cache", Description: "Clear Windows DNS resolver cache", Action: func() error { return cleaner.FlushDNSCache(core.Verbose) }},
+		MenuOption{Name: "Memory Diagnostic", Description: "Run Windows Memory Diagnostic tool", Action: func() error { return cleaner.RunMemoryDiagnostic(core.Verbose) }},
+		MenuOption{Name: "Clean Prefetch Cache", Description: "Clean Windows prefetch directory", Action: func() error { return cleaner.CleanPrefetch(core.Verbose) }},
+		MenuOption{Name: "Reset Network", Description: "Reset Windows network configuration", Action: func() error { return cleaner.ResetNetworkConfig(core.Verbose) }},
 		MenuOption{
 			Name:        "Run All Cleaning Operations",
 			Description: "Execute all cleaning operations sequentially",
@@ -149,16 +152,16 @@ func getMenuOptions() []MenuOption {
 					name   string
 					action func() error
 				}{
-					{"Disk Cleanup", RunDiskCleanup},
-					{"Temporary Files Cleaning", CleanTempFiles},
-					{"Event Logs Clearing", ClearEventLogs},
-					{"System File Checker", RunSystemFileChecker},
-					{"DISM Windows Image Repair", RunDISM},
-					{"Empty Recycle Bin", EmptyRecycleBin},
-					{"Disk Optimization", RunDiskOptimization},
-					{"Check Disk", RunCheckDisk},
-					{"Flush DNS Cache", FlushDNSCache},
-					{"Clean Prefetch Cache", CleanPrefetch},
+					{"Disk Cleanup", func() error { return cleaner.RunDiskCleanup(core.Verbose) }},
+					{"Temporary Files Cleaning", func() error { return cleaner.CleanTempFiles(core.Verbose) }},
+					{"Event Logs Clearing", func() error { return cleaner.ClearEventLogs(core.Verbose) }},
+					{"System File Checker", func() error { return cleaner.RunSystemFileChecker(core.Verbose) }},
+					{"DISM Windows Image Repair", func() error { return cleaner.RunDISM(core.Verbose) }},
+					{"Empty Recycle Bin", func() error { return cleaner.EmptyRecycleBin(core.Verbose) }},
+					{"Disk Optimization", func() error { return cleaner.RunDiskOptimization(core.Verbose) }},
+					{"Check Disk", func() error { return cleaner.RunCheckDisk(core.Verbose) }},
+					{"Flush DNS Cache", func() error { return cleaner.FlushDNSCache(core.Verbose) }},
+					{"Clean Prefetch Cache", func() error { return cleaner.CleanPrefetch(core.Verbose) }},
 				}
 
 				for _, op := range operations {
@@ -179,4 +182,4 @@ func getMenuOptions() []MenuOption {
 	)
 
 	return options
-}
+} 

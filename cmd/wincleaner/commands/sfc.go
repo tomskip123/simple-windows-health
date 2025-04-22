@@ -13,7 +13,7 @@ func NewSFCCommand() *cobra.Command {
 		Use:   "sfc",
 		Short: "Run System File Checker",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "System File Checker", cleaner.RunSystemFileChecker, 1000*time.Second)
+			core.RunOperation(cmd.Context(), "System File Checker", func() error { return cleaner.RunSystemFileChecker(core.Verbose) }, 1000*time.Second)
 		},
 	}
 } 

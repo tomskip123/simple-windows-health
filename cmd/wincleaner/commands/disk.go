@@ -12,7 +12,7 @@ func NewDiskCommand() *cobra.Command {
 		Use:   "disk",
 		Short: "Run Disk Cleanup utility",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Disk Cleanup", cleaner.RunDiskCleanup, 0)
+			core.RunOperation(cmd.Context(), "Disk Cleanup", func() error { return cleaner.RunDiskCleanup(core.Verbose) }, 0)
 		},
 	}
 } 

@@ -5,12 +5,11 @@ import (
 	"os/exec"
 	"path/filepath"
 	"fmt"
-	"github.com/user/windows_health/cmd/wincleaner/core"
 )
 
 // RunDiskCleanup executes the Windows built-in Disk Cleanup utility (cleanmgr.exe)
-func RunDiskCleanup() error {
-	if core.Verbose {
+func RunDiskCleanup(verbose bool) error {
+	if verbose {
 		fmt.Println("[VERBOSE] Running command: cleanmgr /sageset:102")
 	}
 	// Using sageset and sagerun with a specific registry key (102)
@@ -21,7 +20,7 @@ func RunDiskCleanup() error {
 		return err
 	}
 
-	if core.Verbose {
+	if verbose {
 		fmt.Println("[VERBOSE] Running command: cleanmgr /sagerun:102")
 	}
 	// Then run the cleanup with the saved settings
@@ -30,7 +29,7 @@ func RunDiskCleanup() error {
 }
 
 // CleanTempFiles removes files from Windows temporary directories
-func CleanTempFiles() error {
+func CleanTempFiles(verbose bool) error {
 	// Get the Windows temp directory
 	tempDir := os.Getenv("TEMP")
 	if tempDir == "" {
@@ -41,18 +40,24 @@ func CleanTempFiles() error {
 	// Also clean user temp directory
 	userTempDir := filepath.Join(os.Getenv("USERPROFILE"), "AppData", "Local", "Temp")
 
+	if verbose {
+		fmt.Printf("[VERBOSE] Cleaning system temp directory: %s\n", tempDir)
+	}
 	// Clean the system temp directory
-	if err := cleanDirectory(tempDir); err != nil {
+	if err := cleanDirectory(tempDir, verbose); err != nil {
 		return err
 	}
 
+	if verbose {
+		fmt.Printf("[VERBOSE] Cleaning user temp directory: %s\n", userTempDir)
+	}
 	// Clean the user temp directory
-	return cleanDirectory(userTempDir)
+	return cleanDirectory(userTempDir, verbose)
 }
 
 // cleanDirectory removes files from the specified directory
 // It skips files that are in use and returns no error in that case
-func cleanDirectory(dir string) error {
+func cleanDirectory(dir string, verbose bool) error {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return err
@@ -65,11 +70,17 @@ func cleanDirectory(dir string) error {
 		info, err := entry.Info()
 		if err != nil {
 			// Just log and continue if we can't get file info
+			if verbose {
+				fmt.Printf("[VERBOSE] Could not get info for %s: %v\n", path, err)
+			}
 			continue
 		}
 
 		// Remove files only, not directories
 		if !info.IsDir() {
+			if verbose {
+				fmt.Printf("[VERBOSE] Removing file: %s\n", path)
+			}
 			// Attempt to remove the file, ignore errors for files in use
 			os.Remove(path)
 		}

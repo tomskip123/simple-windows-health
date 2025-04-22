@@ -12,7 +12,7 @@ func NewFlushDNSCommand() *cobra.Command {
 		Use:   "flushdns",
 		Short: "Flush DNS resolver cache",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Flush DNS Cache", cleaner.FlushDNSCache, 0)
+			core.RunOperation(cmd.Context(), "Flush DNS Cache", func() error { return cleaner.FlushDNSCache(core.Verbose) }, 0)
 		},
 	}
 } 

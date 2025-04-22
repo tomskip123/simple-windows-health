@@ -12,7 +12,7 @@ func NewMemcheckCommand() *cobra.Command {
 		Use:   "memcheck",
 		Short: "Run Windows Memory Diagnostic tool",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Windows Memory Diagnostic", cleaner.RunMemoryDiagnostic, 0)
+			core.RunOperation(cmd.Context(), "Windows Memory Diagnostic", func() error { return cleaner.RunMemoryDiagnostic(core.Verbose) }, 0)
 		},
 	}
 } 

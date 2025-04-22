@@ -12,7 +12,7 @@ func NewOptimalCommand() *cobra.Command {
 		Use:   "optimal",
 		Short: "Apply optimal Windows settings (e.g., disable Fast Boot)",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Set Optimal Windows Settings", cleaner.SetOptimalWindowsSettings, 0)
+			core.RunOperation(cmd.Context(), "Set Optimal Windows Settings", func() error { return cleaner.SetOptimalWindowsSettings(core.Verbose) }, 0)
 		},
 	}
 } 

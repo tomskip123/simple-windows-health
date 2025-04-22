@@ -12,7 +12,7 @@ func NewRecycleCommand() *cobra.Command {
 		Use:   "recycle",
 		Short: "Empty Recycle Bin",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Empty Recycle Bin", cleaner.EmptyRecycleBin, 0)
+			core.RunOperation(cmd.Context(), "Empty Recycle Bin", func() error { return cleaner.EmptyRecycleBin(core.Verbose) }, 0)
 		},
 	}
 } 

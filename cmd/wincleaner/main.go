@@ -56,6 +56,7 @@ func main() {
 		commands.NewAllCommand(),
 		commands.NewStatusCommand(),
 		commands.NewOptimalCommand(),
+		commands.NewInteractiveCommand(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {

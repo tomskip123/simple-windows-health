@@ -12,7 +12,7 @@ func NewOptimizeCommand() *cobra.Command {
 		Use:   "optimize",
 		Short: "Run Disk Optimization (defrag for HDDs, TRIM for SSDs)",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Disk Optimization", cleaner.RunDiskOptimization, 0)
+			core.RunOperation(cmd.Context(), "Disk Optimization", func() error { return cleaner.RunDiskOptimization(core.Verbose) }, 0)
 		},
 	}
 } 

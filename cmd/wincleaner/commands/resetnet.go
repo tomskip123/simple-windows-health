@@ -12,7 +12,7 @@ func NewResetNetCommand() *cobra.Command {
 		Use:   "resetnet",
 		Short: "Reset Windows network configuration",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Reset Network Configuration", cleaner.ResetNetworkConfig, 0)
+			core.RunOperation(cmd.Context(), "Reset Network Configuration", func() error { return cleaner.ResetNetworkConfig(core.Verbose) }, 0)
 		},
 	}
 } 

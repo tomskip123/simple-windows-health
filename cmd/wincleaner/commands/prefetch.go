@@ -12,7 +12,7 @@ func NewPrefetchCommand() *cobra.Command {
 		Use:   "prefetch",
 		Short: "Clean Windows prefetch directory",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "Clean Prefetch Cache", cleaner.CleanPrefetch, 0)
+			core.RunOperation(cmd.Context(), "Clean Prefetch Cache", func() error { return cleaner.CleanPrefetch(core.Verbose) }, 0)
 		},
 	}
 } 
