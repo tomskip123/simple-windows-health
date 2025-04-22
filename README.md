@@ -70,6 +70,7 @@ Field descriptions:
 - `resetnet`: Reset Windows network configuration
 - `all`: Run all cleaning operations
 - `status`: Display system status information
+- `optimal`: Apply optimal Windows settings (e.g., disables Fast Boot for better compatibility)
 - `interactive`: Launch interactive console mode
 - `admin`: Request administrator privileges
 
@@ -83,6 +84,7 @@ wincleaner optimize         # Run Disk Optimization
 wincleaner chkdsk           # Run Check Disk utility
 wincleaner status           # Display system status information
 wincleaner all              # Run all cleaning operations
+wincleaner optimal          # Apply optimal Windows settings (disables Fast Boot)
 ```
 
 ## Installation

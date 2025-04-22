@@ -38,6 +38,7 @@ func main() {
 	rootCmd.Version = version
 	rootCmd.SetVersionTemplate("Windows Health Cleaner version {{.Version}}\n")
 	rootCmd.PersistentFlags().StringVar(&core.ConfigFile, "config", "", "Path to config YAML file")
+	rootCmd.PersistentFlags().BoolVarP(&core.Verbose, "verbose", "v", false, "Enable verbose logging to console")
 
 	rootCmd.AddCommand(
 		commands.NewDiskCommand(),
@@ -51,10 +52,10 @@ func main() {
 		commands.NewFlushDNSCommand(),
 		commands.NewMemcheckCommand(),
 		commands.NewPrefetchCommand(),
-		commands.NewPowerCommand(),
 		commands.NewResetNetCommand(),
 		commands.NewAllCommand(),
 		commands.NewStatusCommand(),
+		commands.NewOptimalCommand(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {

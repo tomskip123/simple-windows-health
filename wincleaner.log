@@ -1,0 +1,44 @@
+{"level":"info","msg":"Running System File Checker...","time":"2025-04-22T12:38:08+01:00"}
+{"level":"info","msg":"System File Checker completed successfully.","time":"2025-04-22T12:39:03+01:00"}
+time="2025-04-22T13:51:31+01:00" level=info msg="Running System File Checker..."
+time="2025-04-22T13:51:31+01:00" level=error msg="Error running System File Checker: exit status 1"
+time="2025-04-22T13:52:07+01:00" level=info msg="Running all cleaning operations..."
+time="2025-04-22T13:52:07+01:00" level=info msg="Running Disk Cleanup..."
+time="2025-04-22T13:52:12+01:00" level=info msg="Disk Cleanup completed successfully."
+time="2025-04-22T13:52:12+01:00" level=info msg="Running Temporary Files Cleaning..."
+time="2025-04-22T13:52:12+01:00" level=info msg="Temporary Files Cleaning completed successfully."
+time="2025-04-22T13:52:12+01:00" level=info msg="Running Event Logs Clearing..."
+time="2025-04-22T13:53:14+01:00" level=info msg="Running all cleaning operations..."
+time="2025-04-22T13:53:14+01:00" level=info msg="Running Disk Cleanup..."
+time="2025-04-22T16:10:03+01:00" level=info msg="Running all cleaning operations..."
+time="2025-04-22T16:10:03+01:00" level=info msg="Running Disk Cleanup..."
+time="2025-04-22T16:10:27+01:00" level=info msg="Running all cleaning operations..."
+time="2025-04-22T16:10:27+01:00" level=info msg="Running Disk Cleanup..."
+time="2025-04-22T16:10:49+01:00" level=info msg="Disk Cleanup completed successfully."
+time="2025-04-22T16:10:49+01:00" level=info msg="Running Temporary Files Cleaning..."
+time="2025-04-22T16:10:49+01:00" level=info msg="Temporary Files Cleaning completed successfully."
+time="2025-04-22T16:10:49+01:00" level=info msg="Running Event Logs Clearing..."
+time="2025-04-22T16:11:00+01:00" level=info msg="Event Logs Clearing completed successfully."
+time="2025-04-22T16:11:00+01:00" level=info msg="Running System File Checker..."
+time="2025-04-22T16:15:14+01:00" level=info msg="System File Checker completed successfully."
+time="2025-04-22T16:15:14+01:00" level=info msg="Running DISM Windows Image Repair..."
+{"level":"info","msg":"Running Set Optimal Windows Settings...","time":"2025-04-22T16:17:25+01:00"}
+{"level":"error","msg":"Error running Set Optimal Windows Settings: failed to disable Fast Boot: exit status 1\nOutput: Set-ItemProperty : Cannot find path 'C:\\Users\\thoma\\code\\windows_health\\HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power' because it does \r\nnot exist.\r\nAt line:1 char:1\r\n+ Set-ItemProperty -Path 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session ...\r\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : ObjectNotFound: (C:\\Users\\thoma\\...n Manager\\Power:String) [Set-ItemProperty], ItemNotFoundException\r\n    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SetItemPropertyCommand\r\n \r\n","time":"2025-04-22T16:17:26+01:00"}
+{"level":"info","msg":"Running Set Optimal Windows Settings...","time":"2025-04-22T16:18:41+01:00"}
+{"level":"info","msg":"Set Optimal Windows Settings completed successfully.","time":"2025-04-22T16:18:41+01:00"}
+{"level":"info","msg":"Running Set Optimal Windows Settings...","time":"2025-04-22T16:22:01+01:00"}
+{"level":"info","msg":"Set Optimal Windows Settings completed successfully.","time":"2025-04-22T16:22:05+01:00"}
+{"level":"info","msg":"Running Set Optimal Windows Settings...","time":"2025-04-22T16:24:29+01:00"}
+{"level":"info","msg":"Set Optimal Windows Settings completed successfully.","time":"2025-04-22T16:25:08+01:00"}
+{"level":"info","msg":"Running Set Optimal Windows Settings...","time":"2025-04-22T16:27:48+01:00"}
+{"level":"info","msg":"Set Optimal Windows Settings completed successfully.","time":"2025-04-22T16:28:05+01:00"}
+{"level":"info","msg":"Running all cleaning operations...","time":"2025-04-22T16:28:56+01:00"}
+{"level":"info","msg":"Running Disk Cleanup...","time":"2025-04-22T16:28:56+01:00"}
+{"level":"info","msg":"Disk Cleanup completed successfully.","time":"2025-04-22T16:29:14+01:00"}
+{"level":"info","msg":"Running Temporary Files Cleaning...","time":"2025-04-22T16:29:14+01:00"}
+{"level":"info","msg":"Temporary Files Cleaning completed successfully.","time":"2025-04-22T16:29:14+01:00"}
+{"level":"info","msg":"Running Event Logs Clearing...","time":"2025-04-22T16:29:14+01:00"}
+{"level":"info","msg":"Event Logs Clearing completed successfully.","time":"2025-04-22T16:29:25+01:00"}
+{"level":"info","msg":"Running System File Checker...","time":"2025-04-22T16:29:25+01:00"}
+{"level":"info","msg":"System File Checker completed successfully.","time":"2025-04-22T16:30:08+01:00"}
+{"level":"info","msg":"Running DISM Windows Image Repair...","time":"2025-04-22T16:30:08+01:00"}

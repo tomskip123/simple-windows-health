@@ -80,7 +80,7 @@ func RunInteractiveMode() {
 
 // getMenuOptions returns the list of menu options
 func getMenuOptions() []MenuOption {
-	return []MenuOption{
+	options := []MenuOption{
 		{
 			Name:        "Restart with Admin Rights",
 			Description: "Restart the application with administrator privileges",
@@ -112,67 +112,34 @@ func getMenuOptions() []MenuOption {
 				return nil
 			},
 		},
-		{
-			Name:        "Disk Cleanup",
-			Description: "Run Windows Disk Cleanup utility",
-			Action:      RunDiskCleanup,
-		},
-		{
-			Name:        "Clean Temporary Files",
-			Description: "Remove temporary files from Windows directories",
-			Action:      CleanTempFiles,
-		},
-		{
-			Name:        "Clear Event Logs",
-			Description: "Clear Windows event logs",
-			Action:      ClearEventLogs,
-		},
-		{
-			Name:        "System File Checker",
-			Description: "Run SFC to scan and repair Windows system files",
-			Action:      RunSystemFileChecker,
-		},
-		{
-			Name:        "DISM Repair",
-			Description: "Run DISM to repair the Windows image",
-			Action:      RunDISM,
-		},
-		{
-			Name:        "Empty Recycle Bin",
-			Description: "Empty the Windows Recycle Bin",
-			Action:      EmptyRecycleBin,
-		},
-		{
-			Name:        "Disk Optimization",
-			Description: "Run disk optimization (defrag for HDDs, TRIM for SSDs)",
-			Action:      RunDiskOptimization,
-		},
-		{
-			Name:        "Check Disk",
-			Description: "Run CHKDSK to scan and repair disk errors",
-			Action:      RunCheckDisk,
-		},
-		{
-			Name:        "Flush DNS Cache",
-			Description: "Clear Windows DNS resolver cache",
-			Action:      FlushDNSCache,
-		},
-		{
-			Name:        "Memory Diagnostic",
-			Description: "Run Windows Memory Diagnostic tool",
-			Action:      RunMemoryDiagnostic,
-		},
-		{
-			Name:        "Clean Prefetch Cache",
-			Description: "Clean Windows prefetch directory",
-			Action:      CleanPrefetch,
-		},
-		{
-			Name:        "Reset Network",
-			Description: "Reset Windows network configuration",
-			Action:      ResetNetworkConfig,
-		},
-		{
+	}
+
+	// Add a visual separator for optimal settings
+	options = append(options, MenuOption{
+		Name:        "--- Optimal Settings ---",
+		Description: "",
+		Action:      func() error { return nil },
+	})
+	options = append(options, MenuOption{
+		Name:        "Apply Optimal Windows Settings",
+		Description: "Apply recommended settings (e.g., disables Fast Boot)",
+		Action:      SetOptimalWindowsSettings,
+	})
+
+	options = append(options,
+		MenuOption{Name: "Disk Cleanup", Description: "Run Windows Disk Cleanup utility", Action: RunDiskCleanup},
+		MenuOption{Name: "Clean Temporary Files", Description: "Remove temporary files from Windows directories", Action: CleanTempFiles},
+		MenuOption{Name: "Clear Event Logs", Description: "Clear Windows event logs", Action: ClearEventLogs},
+		MenuOption{Name: "System File Checker", Description: "Run SFC to scan and repair Windows system files", Action: RunSystemFileChecker},
+		MenuOption{Name: "DISM Repair", Description: "Run DISM to repair the Windows image", Action: RunDISM},
+		MenuOption{Name: "Empty Recycle Bin", Description: "Empty the Windows Recycle Bin", Action: EmptyRecycleBin},
+		MenuOption{Name: "Disk Optimization", Description: "Run disk optimization (defrag for HDDs, TRIM for SSDs)", Action: RunDiskOptimization},
+		MenuOption{Name: "Check Disk", Description: "Run CHKDSK to scan and repair disk errors", Action: RunCheckDisk},
+		MenuOption{Name: "Flush DNS Cache", Description: "Clear Windows DNS resolver cache", Action: FlushDNSCache},
+		MenuOption{Name: "Memory Diagnostic", Description: "Run Windows Memory Diagnostic tool", Action: RunMemoryDiagnostic},
+		MenuOption{Name: "Clean Prefetch Cache", Description: "Clean Windows prefetch directory", Action: CleanPrefetch},
+		MenuOption{Name: "Reset Network", Description: "Reset Windows network configuration", Action: ResetNetworkConfig},
+		MenuOption{
 			Name:        "Run All Cleaning Operations",
 			Description: "Execute all cleaning operations sequentially",
 			Action: func() error {
@@ -209,5 +176,7 @@ func getMenuOptions() []MenuOption {
 				return nil
 			},
 		},
-	}
+	)
+
+	return options
 }

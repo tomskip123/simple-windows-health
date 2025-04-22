@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -35,6 +36,9 @@ var (
 
 	// Logger is the global log target; set by SetupLogger
 	Logger *logrus.Logger
+
+	// Verbose toggles debug logging to console
+	Verbose bool
 )
 
 // LoadConfig reads the YAML config (if present) into Config
@@ -59,16 +63,27 @@ func SetupLogger() {
 	if logPath == "" {
 		logPath = "wincleaner.log"
 	}
-	logger := logrus.New()
-	logger.SetFormatter(&logrus.JSONFormatter{})
-	logger.SetOutput(&lumberjack.Logger{
+	// Setup file logger for log rotation
+	fileLogger := &lumberjack.Logger{
 		Filename:   logPath,
 		MaxSize:    10,
 		MaxBackups: 5,
 		MaxAge:     30,
 		Compress:   true,
-	})
-	logger.SetLevel(logrus.InfoLevel)
+	}
+
+	logger := logrus.New()
+	if Verbose {
+		// Verbose to console and file with debug level
+		logger.SetFormatter(&logrus.TextFormatter{FullTimestamp: true})
+		logger.SetOutput(io.MultiWriter(fileLogger, os.Stdout))
+		logger.SetLevel(logrus.DebugLevel)
+	} else {
+		logger.SetFormatter(&logrus.JSONFormatter{})
+		logger.SetOutput(fileLogger)
+		logger.SetLevel(logrus.InfoLevel)
+	}
+
 	Logger = logger
 }
 
