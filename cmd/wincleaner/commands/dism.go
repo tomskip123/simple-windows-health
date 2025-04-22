@@ -13,7 +13,7 @@ func NewDismCommand() *cobra.Command {
 		Use:   "dism",
 		Short: "Run DISM to repair Windows image",
 		Run: func(cmd *cobra.Command, args []string) {
-			core.RunOperation(cmd.Context(), "DISM Windows Image Repair", cleaner.RunDISM, 180*time.Second)
+			core.RunOperation(cmd.Context(), "DISM Windows Image Repair", cleaner.RunDISM, 1000*time.Second)
 		},
 	}
 } 

@@ -42,3 +42,17 @@ time="2025-04-22T16:15:14+01:00" level=info msg="Running DISM Windows Image Repa
 {"level":"info","msg":"Running System File Checker...","time":"2025-04-22T16:29:25+01:00"}
 {"level":"info","msg":"System File Checker completed successfully.","time":"2025-04-22T16:30:08+01:00"}
 {"level":"info","msg":"Running DISM Windows Image Repair...","time":"2025-04-22T16:30:08+01:00"}
+{"level":"info","msg":"Operation DISM Windows Image Repair canceled: context deadline exceeded","time":"2025-04-22T16:33:08+01:00"}
+{"level":"info","msg":"Running Empty Recycle Bin...","time":"2025-04-22T16:33:08+01:00"}
+{"level":"error","msg":"Error running Empty Recycle Bin: exit status 1","time":"2025-04-22T16:33:08+01:00"}
+{"level":"info","msg":"Running Disk Optimization...","time":"2025-04-22T16:33:08+01:00"}
+{"level":"info","msg":"Running all cleaning operations...","time":"2025-04-22T16:33:39+01:00"}
+{"level":"info","msg":"Running Disk Cleanup...","time":"2025-04-22T16:33:39+01:00"}
+{"level":"info","msg":"Disk Cleanup completed successfully.","time":"2025-04-22T16:34:01+01:00"}
+{"level":"info","msg":"Running Temporary Files Cleaning...","time":"2025-04-22T16:34:01+01:00"}
+{"level":"info","msg":"Temporary Files Cleaning completed successfully.","time":"2025-04-22T16:34:01+01:00"}
+{"level":"info","msg":"Running Event Logs Clearing...","time":"2025-04-22T16:34:01+01:00"}
+{"level":"info","msg":"Event Logs Clearing completed successfully.","time":"2025-04-22T16:34:19+01:00"}
+{"level":"info","msg":"Running System File Checker...","time":"2025-04-22T16:34:19+01:00"}
+{"level":"info","msg":"System File Checker completed successfully.","time":"2025-04-22T16:35:03+01:00"}
+{"level":"info","msg":"Running DISM Windows Image Repair...","time":"2025-04-22T16:35:03+01:00"}
