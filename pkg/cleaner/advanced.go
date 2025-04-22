@@ -2,12 +2,16 @@ package cleaner
 
 import (
 	"os/exec"
+	"fmt"
+	"github.com/user/windows_health/cmd/wincleaner/core"
 )
 
 // ClearEventLogs clears Windows event logs using the wevtutil command
 func ClearEventLogs() error {
-	// Get a list of all event logs
 	cmd := exec.Command("wevtutil", "el")
+	if core.Verbose {
+		fmt.Println("[VERBOSE] Running command: wevtutil el")
+	}
 	output, err := cmd.Output()
 	if err != nil {
 		return err
@@ -20,6 +24,9 @@ func ClearEventLogs() error {
 			continue
 		}
 		clearCmd := exec.Command("wevtutil", "cl", logName)
+		if core.Verbose {
+			fmt.Printf("[VERBOSE] Running command: wevtutil cl %s\n", logName)
+		}
 		clearCmd.Run() // Ignore errors, as some logs might be protected
 	}
 
@@ -28,18 +35,27 @@ func ClearEventLogs() error {
 
 // RunSystemFileChecker runs the Windows System File Checker to repair system files
 func RunSystemFileChecker() error {
+	if core.Verbose {
+		fmt.Println("[VERBOSE] Running command: sfc /scannow")
+	}
 	cmd := exec.Command("sfc", "/scannow")
 	return cmd.Run()
 }
 
 // RunDISM runs the Deployment Image Servicing and Management tool to repair Windows image
 func RunDISM() error {
+	if core.Verbose {
+		fmt.Println("[VERBOSE] Running command: DISM /Online /Cleanup-Image /RestoreHealth")
+	}
 	cmd := exec.Command("DISM", "/Online", "/Cleanup-Image", "/RestoreHealth")
 	return cmd.Run()
 }
 
 // EmptyRecycleBin empties the Windows Recycle Bin
 func EmptyRecycleBin() error {
+	if core.Verbose {
+		fmt.Println("[VERBOSE] Running command: powershell -Command Clear-RecycleBin -Force")
+	}
 	// Using PowerShell to clear recycle bin
 	cmd := exec.Command("powershell", "-Command", "Clear-RecycleBin", "-Force")
 	return cmd.Run()

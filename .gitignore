@@ -26,4 +26,4 @@ bin/
 
 bin/*
 
-wincleaner.log
+./wincleaner.log

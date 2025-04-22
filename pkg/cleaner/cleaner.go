@@ -4,10 +4,15 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"fmt"
+	"github.com/user/windows_health/cmd/wincleaner/core"
 )
 
 // RunDiskCleanup executes the Windows built-in Disk Cleanup utility (cleanmgr.exe)
 func RunDiskCleanup() error {
+	if core.Verbose {
+		fmt.Println("[VERBOSE] Running command: cleanmgr /sageset:102")
+	}
 	// Using sageset and sagerun with a specific registry key (102)
 	// First, set up the configuration with sageset
 	setupCmd := exec.Command("cleanmgr", "/sageset:102")
@@ -16,6 +21,9 @@ func RunDiskCleanup() error {
 		return err
 	}
 
+	if core.Verbose {
+		fmt.Println("[VERBOSE] Running command: cleanmgr /sagerun:102")
+	}
 	// Then run the cleanup with the saved settings
 	cmd := exec.Command("cleanmgr", "/sagerun:102")
 	return cmd.Run()

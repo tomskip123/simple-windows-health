@@ -56,3 +56,25 @@ time="2025-04-22T16:15:14+01:00" level=info msg="Running DISM Windows Image Repa
 {"level":"info","msg":"Running System File Checker...","time":"2025-04-22T16:34:19+01:00"}
 {"level":"info","msg":"System File Checker completed successfully.","time":"2025-04-22T16:35:03+01:00"}
 {"level":"info","msg":"Running DISM Windows Image Repair...","time":"2025-04-22T16:35:03+01:00"}
+{"level":"info","msg":"Operation DISM Windows Image Repair canceled: context deadline exceeded","time":"2025-04-22T16:38:03+01:00"}
+{"level":"info","msg":"Running Empty Recycle Bin...","time":"2025-04-22T16:38:03+01:00"}
+{"level":"error","msg":"Error running Empty Recycle Bin: exit status 1","time":"2025-04-22T16:38:03+01:00"}
+{"level":"info","msg":"Running Disk Optimization...","time":"2025-04-22T16:38:03+01:00"}
+{"level":"info","msg":"Disk Optimization completed successfully.","time":"2025-04-22T16:38:54+01:00"}
+{"level":"info","msg":"Running Check Disk...","time":"2025-04-22T16:38:54+01:00"}
+{"level":"error","msg":"Error running Check Disk: exit status 3","time":"2025-04-22T16:38:57+01:00"}
+{"level":"info","msg":"Running Flush DNS Cache...","time":"2025-04-22T16:38:57+01:00"}
+{"level":"info","msg":"Flush DNS Cache completed successfully.","time":"2025-04-22T16:38:57+01:00"}
+{"level":"info","msg":"Running Windows Memory Diagnostic...","time":"2025-04-22T16:38:57+01:00"}
+{"level":"info","msg":"Windows Memory Diagnostic completed successfully.","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"Running Clean Prefetch Cache...","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"Clean Prefetch Cache completed successfully.","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"Running Optimize Power Configuration...","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"Optimize Power Configuration completed successfully.","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"Running Reset Network Configuration...","time":"2025-04-22T16:45:04+01:00"}
+{"level":"error","msg":"Error running Reset Network Configuration: exit status 1","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"All cleaning operations completed.","time":"2025-04-22T16:45:04+01:00"}
+{"level":"info","msg":"Running Reset Network Configuration...","time":"2025-04-22T16:48:07+01:00"}
+{"level":"error","msg":"Error running Reset Network Configuration: netsh int ip reset failed: exit status 1\nOutput: Resetting Compartment Forwarding, OK!\r\nResetting Compartment, OK!\r\nResetting Control Protocol, OK!\r\nResetting Echo Sequence Request, OK!\r\nResetting Global, OK!\r\nResetting Interface, OK!\r\nResetting Anycast Address, OK!\r\nResetting Multicast Address, OK!\r\nResetting Unicast Address, OK!\r\nResetting Neighbor, OK!\r\nResetting Path, OK!\r\nResetting Potential, OK!\r\nResetting Prefix Policy, OK!\r\nResetting Proxy Neighbor, OK!\r\nResetting Route, OK!\r\nResetting Site Prefix, OK!\r\nResetting Subinterface, OK!\r\nResetting Wakeup Pattern, OK!\r\nResetting Resolve Neighbor, OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , failed.\r\nAccess is denied.\r\n\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nRestart the computer to complete this action.\r\n\r\n","time":"2025-04-22T16:48:07+01:00"}
+{"level":"info","msg":"Running Reset Network Configuration...","time":"2025-04-22T16:53:02+01:00"}
+{"level":"error","msg":"Error running Reset Network Configuration: netsh int ip reset failed: exit status 1\nOutput: Resetting Compartment Forwarding, OK!\r\nResetting Compartment, OK!\r\nResetting Control Protocol, OK!\r\nResetting Echo Sequence Request, OK!\r\nResetting Global, OK!\r\nResetting Interface, OK!\r\nResetting Anycast Address, OK!\r\nResetting Multicast Address, OK!\r\nResetting Unicast Address, OK!\r\nResetting Neighbor, OK!\r\nResetting Path, OK!\r\nResetting Potential, OK!\r\nResetting Prefix Policy, OK!\r\nResetting Proxy Neighbor, OK!\r\nResetting Route, OK!\r\nResetting Site Prefix, OK!\r\nResetting Subinterface, OK!\r\nResetting Wakeup Pattern, OK!\r\nResetting Resolve Neighbor, OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , failed.\r\nAccess is denied.\r\n\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nResetting , OK!\r\nRestart the computer to complete this action.\r\n\r\n","time":"2025-04-22T16:53:03+01:00"}
