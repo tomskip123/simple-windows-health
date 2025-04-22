@@ -23,3 +23,5 @@ bin/
 
 # Mac OS files
 .DS_Store 
+
+bin/*
